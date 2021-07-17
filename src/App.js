@@ -5,14 +5,15 @@ import {
     Route,
     Redirect,
 } from 'react-router-dom';
-// import { Navbar } from './app/Navbar';
+import { Navbar } from './app/Navbar';
 import { AddPostForm } from './features/posts/AddPostForm';
 import { PostsList } from './features/posts/PostsList';
+import { SinglePostPage } from './features/posts/SinglePostPage';
 
 function App() {
     return (
         <Router>
-            {/* <Navbar /> */}
+            <Navbar />
             <div className="App">
                 <Switch>
                     <Route
@@ -24,6 +25,11 @@ function App() {
                                 <PostsList />
                             </>
                         )}
+                    />
+                    <Route
+                        exact
+                        path="/posts/:postId"
+                        component={SinglePostPage}
                     />
                     <Redirect to="/" />
                 </Switch>
