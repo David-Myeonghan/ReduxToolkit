@@ -54,3 +54,5 @@ const EditPostForm = ({ match }) => {
         </section>
     );
 };
+
+export { EditPostForm };
