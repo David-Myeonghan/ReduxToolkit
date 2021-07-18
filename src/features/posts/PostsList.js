@@ -1,11 +1,23 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, {useEffect} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAllPosts, fetchPosts } from './postsSlice';
 import { Link } from 'react-router-dom';
 import { PostAuthor } from './PostAuthor';
 import { ReactionButtons } from './ReactionButtons';
 
 export const PostsList = () => {
-    const posts = useSelector((state) => state.posts);
+    const dispatch = useDispatch();
+
+    const posts = useSelector(selectAllPosts);
+    // async
+    const postStatus = useSelector(state => state.posts.status) // this help to fetch it once.
+
+    // async
+    useEffect(() => {
+        if (postStatus === 'idle') {
+            dispatch(fetchPosts())
+        }
+    }, [postStatus, dispatch])
 
     // Sort posts in revers by datetime string
     const orderedPosts = posts
