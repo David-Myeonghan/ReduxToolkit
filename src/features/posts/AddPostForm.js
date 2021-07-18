@@ -19,6 +19,10 @@ export const AddPostForm = () => {
         if (title && content) {
             dispatch(postAdded(title, content, userId));
         }
+
+        setTitle('');
+        setContent('')
+        setUserId('')
     };
 
     const canSave = Boolean(title) && Boolean(content) && Boolean(userId);

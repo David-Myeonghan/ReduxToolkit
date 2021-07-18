@@ -8,6 +8,7 @@ const initialState = [
         title: 'First Post!',
         content: 'Hello',
         date: sub(new Date(), { minute: 10 }).toISOString(),
+        reactions: {thumbsUp: 0, hooray: 0, heart: 0, rocket: 0, eyes: 0, },
     },
     {
         id: '2',
@@ -15,6 +16,7 @@ const initialState = [
         title: 'Second Post!',
         content: 'Redux Legit',
         date: sub(new Date(), { minute: 5 }).toISOString(),
+        reactions: {thumbsUp: 0, hooray: 0, heart: 0, rocket: 0, eyes: 0, },
     },
 ];
 
@@ -36,6 +38,7 @@ const postsSlice = createSlice({
                         title: title,
                         content: content,
                         user: userId,
+                        reactions: {thumbsUp: 0, hooray: 0, heart: 0, rocket: 0, eyes: 0, },
                     },
                 };
             },
@@ -49,9 +52,17 @@ const postsSlice = createSlice({
                 existingPost.content = content;
             }
         },
+        reactionAdded(state, action) {
+            const {postId, reaction} = action.payload;
+            const existingPost = state.find(post => post.id === postId)
+
+            if(existingPost) {
+                existingPost.reactions[reaction]++;
+            }
+        }
     },
 });
 
-export const { postAdded, postUpdated } = postsSlice.actions; //exporting 'action creator function'
+export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions; //exporting 'action creator function'
 
 export default postsSlice.reducer;
