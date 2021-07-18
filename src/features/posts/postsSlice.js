@@ -32,6 +32,14 @@ const initialState = {
     error: null,
 }
 
+//args:
+// string used as the prefix for the generated action types
+// 'payload createor' callback function // using async/await in try/catch
+export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
+    const response = await client.get('/fageApi/posts') // response will {posts: []}
+    return response.posts
+})
+
 const postsSlice = createSlice({
     name: 'posts',
     initialState,
@@ -73,6 +81,20 @@ const postsSlice = createSlice({
             }
         }
     },
+    extraReducers: {
+        [fetchPosts.pending]: (state, action) => {
+            state.status = 'loading'
+        },
+        [fetchPosts.fulfilled]: (state, action) => {
+            state.status = 'succeeded'
+            // Add any fetched posts to the array
+            state.posts = state.posts.concat(action.payload);
+        },
+        [fetchPosts.rejected]: (state, action) => {
+            state.status = 'failed'
+            state.error = action.error.message;
+        }
+    }
 });
 
 export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions; //exporting 'action creator function'
@@ -82,10 +104,3 @@ export default postsSlice.reducer;
 export const selectAllPosts = state => state.posts.posts;
 export const selectPostById = (state, postId) => state.posts.posts.find(post => post.id === postId);
 
-//args:
-// string used as the prefix for the generated action types
-// 'payload createor' callback function // using async/await in try/catch
-export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
-    const response = await client.get('/fageApi/posts') // response will {posts: []}
-    return response.posts
-})
