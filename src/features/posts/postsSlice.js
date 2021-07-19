@@ -40,6 +40,18 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
     return response.posts;
 });
 
+export const addNewPost = createAsyncThunk(
+    'posts/addNewPost',
+    // receives {title, content, user} obj.
+    async (initialPost) => {
+        // send the initial data to the server
+        const response = await client.post('/fakeApi/posts', {
+            post: initialPost,
+        });
+        return response.post;
+    }
+);
+
 const postsSlice = createSlice({
     name: 'posts',
     initialState,
@@ -89,6 +101,7 @@ const postsSlice = createSlice({
     },
     // for a reducer needs to respond to other actions that weren't defined as part of this slice's reducers field
     extraReducers: {
+        // loading reducers
         [fetchPosts.pending]: (state, action) => {
             state.status = 'loading';
         },
@@ -100,6 +113,11 @@ const postsSlice = createSlice({
         [fetchPosts.rejected]: (state, action) => {
             state.status = 'failed';
             state.error = action.error.message;
+        },
+        //
+        [addNewPost.fulfilled]: (state, action) => {
+            // directly add the new post obj to our posts array
+            state.posts.push(action.payload);
         },
     },
 });
