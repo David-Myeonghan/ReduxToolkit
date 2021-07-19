@@ -5,6 +5,10 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './app/store';
+import { fetchUsers } from './features/users/usersSlice';
+import './api/server';
+
+store.dispatch(fetchUsers());
 
 ReactDOM.render(
     <React.StrictMode>
